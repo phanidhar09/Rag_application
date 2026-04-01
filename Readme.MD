@@ -1,122 +1,119 @@
-🚀 RAG AI Agent using LangChain, Tavily, Chroma & OpenRouter
+🚀 RAG Chat Application (LangChain + Streamlit + Tavily + Chroma)
 
-A Retrieval-Augmented Generation (RAG) system that crawls web content, stores it in a vector database, and answers user queries using an LLM with contextual grounding.
+An end-to-end Retrieval-Augmented Generation (RAG) application with a chat interface, built using:
 
-📌 Overview
-
-This project builds an end-to-end RAG pipeline:
-
-🌐 Crawls documentation using Tavily
-📄 Splits and embeds content using HuggingFace
-🧠 Stores embeddings in ChromaDB
-🔍 Retrieves relevant context for queries
-🤖 Generates answers using Qwen (OpenRouter)
+🧠 LangChain (RAG pipeline)
+🌐 Tavily (web crawling)
+📄 ChromaDB (vector store)
+🤖 OpenRouter (Qwen LLM)
+💬 Streamlit (UI)
+📌 Features
+💬 ChatGPT-style UI using Streamlit
+🌐 Crawl & ingest web data dynamically
+🧠 Context-aware responses (RAG)
+⚡ Persistent vector database
+🔄 Async ingestion pipeline
 🧱 Architecture
-
-
-User Query
-    ↓
-Chroma Retriever
-    ↓
+User (Streamlit UI)
+        ↓
+   User Query
+        ↓
+   Chroma Retriever
+        ↓
 Relevant Documents
-    ↓
-Context + Prompt
-    ↓
+        ↓
+Prompt + Context
+        ↓
 LLM (Qwen via OpenRouter)
-    ↓
-Final Answer
-
-
-
-
+        ↓
+   Final Answer
+📂 Project Structure
+doc-RAG/
+│
+├── ingestion.py        # RAG pipeline (crawl + embed + retrieve)
+├── app.py              # Streamlit chat UI
+├── chroma_db/          # Vector DB (auto-created)
+├── .env                # API keys
+├── logger.py           # Logging utility
+└── README.md
 ⚙️ Setup
-1. Clone Repo
-
+1️⃣ Clone Repository
 git clone https://github.com/<your-username>/doc-RAG.git
 cd doc-RAG
-
-2. Create Virtual Environment
-
+2️⃣ Create Virtual Environment
 python3 -m venv venv
-source venv/bin/activate   
-
-3. Install Dependencies
-
+source venv/bin/activate   # Mac/Linux
+3️⃣ Install Dependencies
 pip install langchain langchain-openai langchain-chroma langchain-huggingface \
-langchain-tavily chromadb sentence-transformers python-dotenv certifi
+langchain-tavily chromadb sentence-transformers python-dotenv certifi streamlit
+4️⃣ Environment Variables
 
-4. Environment Variables
-
-Create a .env file:
+Create .env file:
 
 OPENROUTER_API_KEY=your_openrouter_key
 TAVILY_API_KEY=your_tavily_key
-
-
-▶️ Run the Application
-python ingestion.py
-🔄 How It Works
-1. Web Crawling
-Uses Tavily to crawl https://docs.langchain.com/
-Extracts structured content
-2. Document Processing
-Filters meaningful text
-Splits into chunks using:
-chunk_size = 800
-chunk_overlap = 100
-3. Embedding Generation
-Model: sentence-transformers/all-mpnet-base-v2
-Converts text into vector embeddings
-4. Vector Storage
+▶️ Run the App
+streamlit run app.py
+💬 How to Use
+Step 1: Ingest Data
+Click 📥 Ingest Documents in sidebar
+Crawls LangChain docs via Tavily
 Stores embeddings in ChromaDB
-Persists locally (chroma_db/)
-5. Retrieval
-Fetches top-k relevant documents (k=3)
-Supports MMR for better diversity
-6. LLM Response
-Model: qwen/qwen-2.5-7b-instruct
-Uses retrieved context to generate grounded answers
-🧪 Example
-query = "How to use LangChain for AI agents?"
-
-Output:
-
-FINAL ANSWER:
-<Generated response based on retrieved documents>
-⚡ Key Features
-✅ End-to-end RAG pipeline
-✅ Async ingestion pipeline
-✅ Persistent vector database
-✅ Context-aware Q&A
-✅ Modular and extensible design
+Step 2: Ask Questions
+Type your question in chat
+App retrieves relevant chunks
+LLM generates contextual answer
+Step 3: Chat Experience
+Maintains conversation history
+Clear chat anytime using sidebar
+🔄 Workflow Explained
+1. Ingestion Pipeline (ingestion.py)
+Crawl website using Tavily
+Extract content
+Split into chunks
+Generate embeddings
+Store in ChromaDB
+2. Retrieval
+retriever = chroma.as_retriever(search_kwargs={"k": 3})
+3. RAG Prompting
+Combine query + retrieved context
+Send to LLM
+4. Streamlit UI (app.py)
+Handles chat interaction
+Calls async backend functions
+Displays messages
+🧪 Example Query
+How to use LangChain for AI agents?
+⚡ Key Highlights
+✅ Real-world GenAI project (RAG + UI)
+✅ Uses modern stack (LangChain + LLM APIs)
+✅ Production-style modular design
+✅ Great for interviews & portfolio
 ❗ Common Issues
-1. No Results Returned
-Check Tavily API key
-Increase crawl depth
-2. TypeError: string indices must be integers
+🔴 Async Errors in Streamlit
 
-Fix return format:
+Use:
 
-return {"answer": response.content}
-3. Slow Performance
-Reduce crawl depth/pages
+asyncio.run()
+🔴 Empty Responses
+Ensure ingestion completed
+Check API keys
+🔴 Slow Performance
+Reduce Tavily crawl depth
 Lower chunk size
 🚀 Future Enhancements
-📄 PDF / document upload support
-💬 Streamlit UI (ChatGPT-style)
+📄 Upload PDFs / custom documents
+🧠 Add memory (conversation context)
 🔁 LangGraph agent workflows
-🔍 Hybrid search (vector + keyword)
-🤖 Multi-model support
+🔍 Hybrid search (BM25 + vector)
+🌍 Multi-source ingestion
 🧠 Tech Stack
 LangChain
 Tavily
 ChromaDB
 HuggingFace Embeddings
 OpenRouter (Qwen)
-Python (AsyncIO)
+Streamlit
 👨‍💻 Author
 
 Phanidhar Reddy
-
-Full Stack Developer | GenAI Engineer
-Experience in RAG, LangChain, Cloud & Microservices
